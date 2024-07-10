@@ -1,6 +1,7 @@
 package hhplus.ecommoerce.controller;
 
 import hhplus.ecommoerce.controller.dto.UserDTO;
+import hhplus.ecommoerce.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,12 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
 
+    private final UserService userService;
+
     //잔액 조회
     @Operation(summary = "잔액 조회", description = "유저의 현재 포인트를 조회합니다.")
     @ApiResponse(responseCode = "200", description = "잔액 조회 성공",
         content = @Content(schema = @Schema(implementation = UserDTO.class)))
     @GetMapping("/point/{userId}")
-    public ResponseEntity<UserDTO> selectUserPointList(@PathVariable Long userId) {
+    public ResponseEntity<UserDTO> selectUserPoint(@PathVariable Long userId) {
         // 실제 서비스 로직 구현 필요
         return ResponseEntity.ok(new UserDTO(userId, "이석범", 5000, LocalDateTime.now()));
     }
@@ -38,7 +41,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "잔액 충전 성공",
         content = @Content(schema = @Schema(implementation = UserDTO.class)))
     @PostMapping("/point/charge")
-    public ResponseEntity<UserDTO> userPointCharge(@RequestBody UserDTO userDto) {
+    public ResponseEntity<UserDTO> useChargePoint(@RequestBody UserDTO userDto) {
         // 실제 서비스 로직 구현 필요
         return ResponseEntity.ok(new UserDTO(userDto.id(), userDto.name(), 1000000, LocalDateTime.now()));
     }

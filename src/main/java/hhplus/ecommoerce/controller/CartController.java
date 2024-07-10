@@ -1,6 +1,8 @@
 package hhplus.ecommoerce.controller;
 
 import hhplus.ecommoerce.controller.dto.CartDTO;
+import hhplus.ecommoerce.entity.Cart;
+import hhplus.ecommoerce.service.CartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,15 +26,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/cart")
 public class CartController {
 
+    private final CartService cartService;
+
     @Operation(summary = "장바구니 리스트 조회", description = "장바구니 리스트 조회기능")
     @ApiResponse(responseCode = "200", description = "조회 성공",
         content = @Content(mediaType = "application/json",
             schema = @Schema(implementation = CartDTO.class)))
     @GetMapping("/{userId}")
     public ResponseEntity<CartDTO> selectCartList(@PathVariable Long userId) {
-        List<CartDTO> cartItems = List.of(
-            new CartDTO(1L, userId, 1L, "이강주", 32000, 1)
-        );
+
+        List<Cart> cartList = cartService.selectCartList(userId);
+
+
+        List<CartDTO> cartItems = CartDTO.fromList(cartList);
         return ResponseEntity.ok(CartDTO.ofList(cartItems));
     }
 

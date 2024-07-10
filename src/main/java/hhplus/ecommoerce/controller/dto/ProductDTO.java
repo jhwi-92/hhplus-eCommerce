@@ -30,7 +30,7 @@ public record ProductDTO(
 
     // Product 엔티티로부터 ProductDTO 생성
     public static ProductDTO from(Product product) {
-        return new ProductDTO(product.id(), product.name(), product.price());
+        return new ProductDTO(product.getId(), product.getName(), product.getPrice());
     }
 
     // Product 엔티티 리스트로부터 ProductDTO 리스트 생성

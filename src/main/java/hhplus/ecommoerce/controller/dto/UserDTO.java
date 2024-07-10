@@ -20,10 +20,10 @@ public record UserDTO(
 ) {
     public static UserDTO from(User user) {
         return new UserDTO(
-            user.id(),
-            user.name(),
-            user.point(),
-            user.createdAt()
+            user.getId(),
+            user.getName(),
+            user.getPoint(),
+            user.getCreatedAt()
         );
     }
 
@@ -32,7 +32,7 @@ public record UserDTO(
             this.id,
             this.name,
             this.point,
-            this.createdAt
+            LocalDateTime.now()
         );
     }
 }

@@ -1,6 +1,7 @@
 package hhplus.ecommoerce.controller.dto;
 
 import hhplus.ecommoerce.entity.Cart;
+import hhplus.ecommoerce.entity.Product;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,24 +42,27 @@ public record CartDTO(
     }
 
     // Cart 엔티티로부터 CartDTO 생성
-    public static CartDTO from(Cart cart, String productName, Integer price) {
+    public static CartDTO from(Cart cart, String productName, int price) {
         return new CartDTO(
-            cart.id(),
-            cart.userId(),
-            cart.productId(),
+            cart.getId(),
+            cart.getUserId(),
+            cart.getProductId(),
             productName,
             price,
-            cart.quantity(),
+            cart.getQuantity(),
             null
         );
     }
 
+
     // Cart 엔티티 리스트로부터 CartDTO 리스트 생성
-    public static List<CartDTO> fromList(List<Cart> carts, Function<Long, String> productNameGetter, Function<Long, Integer> priceGetter) {
+    public static List<CartDTO> fromList(List<Cart> carts) {
         return carts.stream()
-            .map(cart -> CartDTO.from(cart, productNameGetter.apply(cart.productId()), priceGetter.apply(cart.productId())))
+            .map(cart -> CartDTO.from(cart, "이강주", 320000))
             .collect(Collectors.toList());
     }
+
+
 
     // CartDTO로부터 Cart 엔티티 생성
     public Cart toEntity() {
