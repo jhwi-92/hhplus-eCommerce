@@ -3,6 +3,8 @@ package hhplus.ecommoerce.service;
 
 import hhplus.ecommoerce.entity.User;
 import hhplus.ecommoerce.repository.UserRepository;
+import hhplus.ecommoerce.service.validator.ProductValidator;
+import hhplus.ecommoerce.service.validator.UserValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,9 +14,10 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserValidator userValidator;
 
     //유저 포인트 조회
-    public User selectUserPoint(Long userId) {
+    public User selectUser(Long userId) {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
 
@@ -30,6 +33,14 @@ public class UserService {
         
         user.chargePoint(amount);
         return userRepository.save(user);
+    }
+
+    @Transactional
+    public void decreaseUserPoint(User user, int price) {
+        userValidator.validator(user, price);
+        user.decreasePoint(price);
+        userRepository.save(user);
+
     }
 
 }
