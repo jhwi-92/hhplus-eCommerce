@@ -20,6 +20,11 @@ public record OrderHistory(
     @Schema(description = "주문 상태", example = "성공")
     String status,
 
+    @Schema(description = "등록일", example = "20240712")
+    String yyyyMmDd,
+
     @Schema(description = "등록 일시", example = "2023-01-01T00:00:00")
     LocalDateTime createdAt
-) {}
+) {
+
+}

@@ -8,21 +8,22 @@ import java.util.List;
 
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Override
     public List<Product> findProductTopList() {
 
-
-        List<Product> products = List.of(
-            new Product(1L, "이강주", 328000, 1, null),
-            new Product(2L, "박지용", 48000, 1, null),
-            new Product(3L, "백현명", 59000, 1, null),
-            new Product(4L, "윤용한", 2800, 1, null),
-            new Product(5L, "이석범", 45000, 1, null)
-        );
-
-        return products;
+        /*
+            SELECT *
+            FROM PRODUCT A
+            INNER JOIN
+            (
+                SELECT TOP 5 PRODUCT_ID, COUNT(*) AS CNT
+                FROM   ORDER_HISTORY A
+                WHERE A.STATUS = '완료'
+                AND A.YYYYMMDD >= '20240710'
+                GROUP BY PRODUCT_ID
+                ORDER BY CNT
+            ) B ON A.PRODUCT_ID = B.PRODUCT_ID
+         */
     }
 }
