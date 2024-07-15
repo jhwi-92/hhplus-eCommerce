@@ -6,8 +6,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Schema(description = "User entity")
+@NoArgsConstructor
 @Entity
 @Getter
 @Table(name = "USER")
@@ -37,7 +39,10 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public User() {
+    public void decreasePoint(int point) {
 
+        this.point -= point;
     }
+
+
 }

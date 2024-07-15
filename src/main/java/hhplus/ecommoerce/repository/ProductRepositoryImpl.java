@@ -16,11 +16,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
 
         List<Product> products = List.of(
-            new Product(1L, "이강주", 328000, null),
-            new Product(2L, "박지용", 48000, null),
-            new Product(3L, "백현명", 59000, null),
-            new Product(4L, "윤용한", 2800, null),
-            new Product(5L, "이석범", 45000, null)
+            new Product(1L, "이강주", 328000, 1, null),
+            new Product(2L, "박지용", 48000, 1, null),
+            new Product(3L, "백현명", 59000, 1, null),
+            new Product(4L, "윤용한", 2800, 1, null),
+            new Product(5L, "이석범", 45000, 1, null)
         );
 
         return products;
