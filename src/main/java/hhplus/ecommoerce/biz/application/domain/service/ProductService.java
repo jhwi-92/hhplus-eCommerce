@@ -36,7 +36,6 @@ public class ProductService {
     }
 
 
-    @Transactional
     public void decreaseProduct(Product product, int quantity) {
         productValidator.validator(product, quantity);
         product.decreaseQuantity(quantity);

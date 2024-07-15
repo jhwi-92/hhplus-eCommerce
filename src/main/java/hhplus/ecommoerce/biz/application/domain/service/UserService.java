@@ -24,7 +24,6 @@ public class UserService {
     }
 
     //유저 포인트 충전
-    @Transactional
     public User userChargePoints(Long userId, Integer amount) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다. ID: " + userId));
@@ -34,7 +33,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional
     public void decreaseUserPoint(User user, int price) {
         userValidator.validator(user, price);
         user.decreasePoint(price);
