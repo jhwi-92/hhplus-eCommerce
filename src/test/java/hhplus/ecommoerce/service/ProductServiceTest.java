@@ -7,8 +7,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import hhplus.ecommoerce.entity.Product;
-import hhplus.ecommoerce.repository.ProductRepository;
+import hhplus.ecommoerce.biz.application.domain.service.ProductService;
+import hhplus.ecommoerce.biz.application.domain.entity.Product;
+import hhplus.ecommoerce.biz.application.domain.repository.ProductRepository;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;

@@ -7,8 +7,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import hhplus.ecommoerce.entity.User;
-import hhplus.ecommoerce.repository.UserRepository;
+import hhplus.ecommoerce.biz.application.domain.service.UserService;
+import hhplus.ecommoerce.biz.application.domain.entity.User;
+import hhplus.ecommoerce.biz.application.domain.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
