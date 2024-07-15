@@ -1,9 +1,11 @@
 package hhplus.ecommoerce.biz.application.domain.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 
+@Entity
 @Schema(description = "Payment entity")
 public class Payment {
 

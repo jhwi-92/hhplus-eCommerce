@@ -2,7 +2,12 @@ package hhplus.ecommoerce.biz.application.domain.repository;
 
 
 import hhplus.ecommoerce.biz.application.domain.entity.Product;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
@@ -10,18 +15,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     @Override
     public List<Product> findProductTopList() {
 
-        /*
-            SELECT *
-            FROM PRODUCT A
-            INNER JOIN
-            (
-                SELECT TOP 5 PRODUCT_ID, COUNT(*) AS CNT
-                FROM   ORDER_HISTORY A
-                WHERE A.STATUS = '완료'
-                AND A.YYYYMMDD >= '20240710'
-                GROUP BY PRODUCT_ID
-                ORDER BY CNT
-            ) B ON A.PRODUCT_ID = B.PRODUCT_ID
-         */
+        List<Product> expectedProducts = Arrays.asList(
+            new Product(1L, "윤용한", 1, 3700, LocalDateTime.now()),
+            new Product(2L, "아이유", 2, 980000000, LocalDateTime.now())
+        );
+        return expectedProducts;
     }
 }

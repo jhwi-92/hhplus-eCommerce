@@ -12,7 +12,7 @@ public class PaymentService {
 
 
     public boolean sendPayment() {
-        paymentClient.sendPayment();
+        paymentClient.sendPayment(1L);
         return true;
     }
 

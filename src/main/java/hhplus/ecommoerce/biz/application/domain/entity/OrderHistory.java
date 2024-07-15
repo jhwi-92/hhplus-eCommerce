@@ -1,30 +1,38 @@
 package hhplus.ecommoerce.biz.application.domain.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Entity
+@Getter
+@NoArgsConstructor
 @Schema(description = "OrderHistory entity")
-public record OrderHistory(
+public class OrderHistory {
 
+    @Id
     @Schema(description = "PK ID", example = "1")
-    Long id,
+    Long id;
 
     @Schema(description = "주문 ID", example = "1")
-    Long orderId,
+    Long orderId;
 
     @Schema(description = "상품 ID", example = "1")
-    Long productId,
+    Long productId;
     @Schema(description = "상품 가격", example = "100")
-    Integer price,
+    Integer price;
 
     @Schema(description = "주문 상태", example = "성공")
-    String status,
+    String status;
 
     @Schema(description = "등록일", example = "20240712")
-    String yyyyMmDd,
+    String yyyyMmDd;
 
     @Schema(description = "등록 일시", example = "2023-01-01T00:00:00")
-    LocalDateTime createdAt
-) {
+    LocalDateTime createdAt;
 
 }
+

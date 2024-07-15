@@ -52,14 +52,14 @@ public record OrderDTO(
     // Entity를 DTO로 변환
     public static OrderDTO from(Order order) {
         return new OrderDTO(
-            order.id(),
-            order.userId(),
-            order.productId(),
-            order.quantity(),
-            order.price(),
-            order.status(),
-            order.createdAt(),
-            order.updatedAt()
+            order.getId(),
+            order.getUserId(),
+            order.getProductId(),
+            order.getQuantity(),
+            order.getPrice(),
+            order.getStatus(),
+            order.getCreatedAt(),
+            order.getUpdatedAt()
         );
     }
 }

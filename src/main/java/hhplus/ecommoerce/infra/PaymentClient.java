@@ -1,11 +1,15 @@
 package hhplus.ecommoerce.infra;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-@Component
-public interface PaymentClient {
 
-    boolean sendPayment();
+@Component
+public class PaymentClient {
+
+    public boolean sendPayment(Long id) {
+        return true;
+    }
 
 
 

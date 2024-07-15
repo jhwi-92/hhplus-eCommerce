@@ -3,9 +3,12 @@ package hhplus.ecommoerce.infra;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface DataPlatformClient {
+public class DataPlatformClient {
 
-    boolean sendDataPlatform();
+    public boolean sendDataPlatform() {
+        return true;
+    }
+
 
 
 }
