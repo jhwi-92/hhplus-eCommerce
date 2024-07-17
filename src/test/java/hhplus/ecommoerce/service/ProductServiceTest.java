@@ -47,25 +47,25 @@ class ProductServiceTest {
         verify(productRepository, times(1)).findAll();
     }
 
-//    @Test
-//    void selectProductsTopList_ReturnTopProducts() {
-//        // given
-//        List<Product> expectedTopProducts = Arrays.asList(
-//            new Product(1L, "이강주", 3988880, LocalDateTime.now()),
-//            new Product(2L, "백현명", 3599990, LocalDateTime.now()),
-//            new Product(2L, "백현명", 3499990, LocalDateTime.now())
-//        );
-//        when(productRepository.findProductTopList()).thenReturn(expectedTopProducts);
-//
-//        // when
-//        List<Product> result = productService.selectProductsTopList();
-//
-//        // then
-//        assertNotNull(result);
-//        assertEquals(3, result.size());
-//        assertEquals(expectedTopProducts, result);
-//        verify(productRepository, times(1)).findProductTopList();
-//    }
+    @Test
+    void selectProductsTopList_ReturnTopProducts() {
+        // given
+        List<Product> expectedTopProducts = Arrays.asList(
+            new Product(1L, "이강주", 3988880, 2, LocalDateTime.now()),
+            new Product(2L, "백현명", 3599990, 2, LocalDateTime.now()),
+            new Product(2L, "백현명", 3499990, 2, LocalDateTime.now())
+        );
+        when(productRepository.findProductTopList()).thenReturn(expectedTopProducts);
+
+        // when
+        List<Product> result = productService.selectProductsTopList();
+
+        // then
+        assertNotNull(result);
+        assertEquals(3, result.size());
+        assertEquals(expectedTopProducts, result);
+        verify(productRepository, times(1)).findProductTopList();
+    }
 
 
 }

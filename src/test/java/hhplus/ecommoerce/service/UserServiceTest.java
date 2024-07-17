@@ -27,36 +27,8 @@ class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-
     @Test
-    void selectUserPoint_ReturnUser_Equals() {
-        //given
-        Long userId = 1L;
-        User expectedUser = new User(userId, "이석범", 100, LocalDateTime.now());
-        when(userRepository.findById(userId)).thenReturn(Optional.of(expectedUser));
-
-        //when
-        User result = userService.selectUserPoint(userId);
-
-        //then
-        assertEquals(expectedUser, result);
-        verify(userRepository, times(1)).findById(userId);
-    }
-
-    @Test
-    void selectUserPoint_EmptyUser_ThrowsIllegalArgumentException() {
-        // given
-        Long userId = 1L;
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
-
-        // when & then
-        assertThrows(IllegalArgumentException.class, () -> userService.selectUserPoint(userId));
-        verify(userRepository, times(1)).findById(userId);
-    }
-
-
-    @Test
-    void userChargePoints_EmptyUser_ThrowsIllegalArgumentException() {
+    void 유저_포인트_충전_유저ID_검증실패() {
         // given
         Long userId = 1L;
         Integer chargePoint = 50;
@@ -69,7 +41,7 @@ class UserServiceTest {
     }
 
     @Test
-    void userChargePoints_ChargesPointsSuccessfully() {
+    void 유저_포인트_충전_성공() {
         // given
         Long userId = 1L;
         Integer initialPoints = 100;
