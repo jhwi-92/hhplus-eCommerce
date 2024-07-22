@@ -28,22 +28,14 @@ public class OrderFacade {
 
         int totalPrice = order.getPrice() * order.getQuantity();
 
-        //서비스의 흐름
+        //재고확인 후 차감
+        productService.decreaseProduct(order.getProductId(), order.getQuantity());
 
-        //상품정보 조회 - 유효한상품
-        Product product = productService.getProduct(order.getProductId());
-
-        //유저정보 조회 - 유효한유저
-        User user = userService.selectUser(order.getUserId());
-
-        //재고 차감
-        productService.decreaseProduct(product, order.getQuantity());
-
-        //유저 포인트 차감
-        userService.decreaseUserPoint(user, totalPrice);
+        //유저확인 후 포인트 차감
+        userService.decreaseUserPoint(order.getUserId(), totalPrice);
 
         //주문 생성
-        Order newOrder = orderService.createOrder(user.getId(), product.getId(), order.getQuantity(), product.getPrice());
+        Order newOrder = orderService.createOrder(order.getUserId(), order.getProductId(), order.getQuantity(), order.getPrice());
 
         //결제 요청
         //설계부족,,,
