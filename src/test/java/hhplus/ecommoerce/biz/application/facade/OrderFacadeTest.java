@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import hhplus.ecommoerce.biz.application.domain.entity.Order;
 import hhplus.ecommoerce.biz.application.domain.entity.Product;
 import hhplus.ecommoerce.biz.application.domain.entity.User;
+import hhplus.ecommoerce.biz.application.domain.repository.ProductRepository;
+import hhplus.ecommoerce.biz.application.domain.repository.UserRepository;
 import hhplus.ecommoerce.biz.application.domain.service.DataPlatformService;
 import hhplus.ecommoerce.biz.application.domain.service.OrderService;
 import hhplus.ecommoerce.biz.application.domain.service.PaymentService;
@@ -14,6 +16,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,18 +33,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @DisplayName("주문결제 파사드를 테스트한다.")
 @SpringBootTest
-@Transactional
 @AutoConfigureMockMvc
 class OrderFacadeTest {
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
     private OrderFacade orderFacade;
-
-    @MockBean
-    private DataPlatformService dataPlatformService;
 
     @Autowired
     private ProductService productService;
@@ -46,23 +46,19 @@ class OrderFacadeTest {
     private UserService userService;
 
     @Autowired
-    private OrderService orderService;
-
+    private ProductRepository productRepository;
     @Autowired
-    private PaymentService paymentService;
-
-    @PersistenceContext
-    private EntityManager entityManager;
+    private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
 
-        Product product = new Product(10L, "윤용", 3200, 10, LocalDateTime.now());
-        entityManager.persist(product);
-        User user = new User(11L, "김종협", 10000, LocalDateTime.now());
-        entityManager.persist(user);
+        Product product = new Product(10L, "윤용", 3200, 100, LocalDateTime.now());
+        productRepository.save(product);
 
-        entityManager.flush();
+        User user = new User(11L, "김종협", 1000000, LocalDateTime.now());
+        userRepository.save(user);
+
     }
 
     @Test
@@ -85,9 +81,79 @@ class OrderFacadeTest {
         assertEquals(9, productService.getProduct(productId).getQuantity());
 
         //사용자 잔액 확인
-        assertEquals(9000, userService.selectUser(userId).getPoint());
+        assertEquals(999000, userService.selectUser(userId).getPoint());
     }
 
     @Test
+    public void 락_안걸었을_때_테스트() throws InterruptedException {
+
+        List<Product> products = productService.selectProductsList();
+        for (Product product: products) {
+            System.out.println("테스트 Product ID: " + product.getId());
+        }
+
+        //given
+        int numberOfThreads = 10;
+        CountDownLatch latch = new CountDownLatch(1);
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+        AtomicInteger successCount = new AtomicInteger(0);
+
+        Long userId = 11L;
+        Long productId = 10L;
+        int quantity = 1;
+        int price = 1000;
+        String status = "성공";
+
+        //when
+        for (int i = 0; i < numberOfThreads; i++) {
+            executorService.submit(() -> {
+                try {
+                    latch.await(); // 모든 스레드가 준비될 때까지 대기
+                    Order order = new Order(userId, productId, quantity, price, status);
+                    try {
+                        Order newOrder = orderFacade.orderPayment(order);
+                        if (newOrder != null && "성공".equals(newOrder.getStatus())) {
+                            successCount.incrementAndGet();
+                        }
+                    } catch (Exception e) {
+                        System.out.println("에러: " + e.getMessage());
+                        List<Product> products2 = productService.selectProductsList();
+                        for (Product product: products2) {
+                            System.out.println("테스트22 Product ID: " + product.getId());
+                        }
+                        // 예외 처리 (재고 부족, 잔액 부족 등)
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        latch.countDown(); // 모든 스레드 시작
+        executorService.shutdown();
+        while (!executorService.isTerminated()) {
+            Thread.sleep(100);
+        }
+
+        //then
+        Product updatedProduct = productService.getProduct(productId);
+        User updatedUser = userService.selectUser(userId);
+
+        System.out.println("성공한 주문수: " + successCount.get());
+        System.out.println("남은 재고 수: " + updatedProduct.getQuantity());
+        // 성공한 주문 수 확인
+        assertEquals(successCount.get(), 100 - updatedProduct.getQuantity());
+
+        System.out.println("상품 재고: " + updatedProduct.getQuantity());
+        // 재고 확인
+        assertTrue(updatedProduct.getQuantity() == 90);
+
+        System.out.println("유저 잔액: " + updatedUser.getPoint());
+        // 사용자 잔액 확인
+        assertEquals(1000000 - (successCount.get() * price), updatedUser.getPoint());
+
+    }
+
+
 
 }

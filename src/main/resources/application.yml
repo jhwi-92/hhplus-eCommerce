@@ -14,14 +14,14 @@ spring:
       path: /h2-console #H2 Console ????
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: false
     hibernate:
-      ddl-auto: update  #DB ??? ??
+      ddl-auto: none #spring.jpa.ddl-auto 를 통해 설정 가능
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        format_sql: true  #?? ?? ??(??)
-        show_sql: true    #?? ?? ??
+        show_sql: true
+        format_sql: true
+    defer-datasource-initialization: true
   sql:
     init:
       mode: always
