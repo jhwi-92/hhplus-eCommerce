@@ -11,9 +11,11 @@ public class PaymentService {
     private final PaymentClient paymentClient;
 
 
-    public boolean sendPayment() {
-        paymentClient.sendPayment(1L);
-        return true;
+    public void sendPayment() {
+
+        if(!paymentClient.sendPayment(1L)) {
+            throw new IllegalArgumentException("결제에 실패했습니다.");
+        }
     }
 
 }

@@ -23,6 +23,7 @@ public class OrderFacade {
     private final DataPlatformService dataPlatformService;
 
     //주문결제
+    //현재 분리하기 좀 애매해서 락에 대해서 공부하고 추후에 @EventListener사용하여 분리할 수정예정입니다
     @Transactional
     public Order orderPayment(Order order) {
 
@@ -38,13 +39,7 @@ public class OrderFacade {
         Order newOrder = orderService.createOrder(order.getUserId(), order.getProductId(), order.getQuantity(), order.getPrice());
 
         //결제 요청
-        //설계부족,,,
-        boolean paymentResult = paymentService.sendPayment();
-
-        if(!paymentResult) {
-            //익셉션 커스텀으로 변경할 것
-            throw new IllegalArgumentException("결제에 실패했습니다.");
-        }
+        paymentService.sendPayment();
 
         //TODO
         //외부 데이터 수집 플랫폼으로 데이터 전송
@@ -52,5 +47,4 @@ public class OrderFacade {
         dataPlatformService.sendDataPlatform();
         return newOrder;
     }
-
 }

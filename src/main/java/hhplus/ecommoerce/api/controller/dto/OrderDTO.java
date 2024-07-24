@@ -38,14 +38,11 @@ public record OrderDTO(
     // DTO를 Entity로 변환
     public Order toEntity() {
         return new Order(
-            this.id,
             this.userId,
             this.productId,
             this.quantity,
             this.price,
-            this.status,
-            LocalDateTime.now(),
-            LocalDateTime.now()
+            this.status
         );
     }
 
