@@ -66,7 +66,7 @@ class OrderFacadeTest {
     }
 
     @Test
-    public void orderFacadeTest() {
+    public void 재고차감_잔액차감_테스트() {
 
         //given
         Long userId = 11L;
@@ -86,6 +86,8 @@ class OrderFacadeTest {
 
         //사용자 잔액 확인
         assertEquals(9000, userService.selectUser(userId).getPoint());
-
     }
+
+    @Test
+
 }
