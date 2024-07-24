@@ -11,6 +11,7 @@ public class PaymentService {
     private final PaymentClient paymentClient;
 
 
+    //결제는 pg요청으로 생각해서 현재는 무조건 true로 받고 있습니다
     public void sendPayment() {
 
         if(!paymentClient.sendPayment(1L)) {
