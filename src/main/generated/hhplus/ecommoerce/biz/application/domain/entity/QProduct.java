@@ -29,6 +29,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final NumberPath<Integer> quantity = createNumber("quantity", Integer.class);
 
+    public final NumberPath<Integer> version = createNumber("version", Integer.class);
+
     public QProduct(String variable) {
         super(Product.class, forVariable(variable));
     }

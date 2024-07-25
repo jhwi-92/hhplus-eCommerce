@@ -2,18 +2,23 @@ package hhplus.ecommoerce.biz.application.domain.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Schema(description = "Cart entity")
+@NoArgsConstructor
 @Entity
 @Data
 @Table(name = "CART")
 public class Cart {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "PK ID", example = "1")
     Long id;
 

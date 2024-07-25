@@ -27,6 +27,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Integer> point = createNumber("point", Integer.class);
 
+    public final NumberPath<Integer> version = createNumber("version", Integer.class);
+
     public QUser(String variable) {
         super(User.class, forVariable(variable));
     }

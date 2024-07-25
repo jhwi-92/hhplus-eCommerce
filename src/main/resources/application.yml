@@ -16,7 +16,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: none #spring.jpa.ddl-auto 를 통해 설정 가능
+      ddl-auto: create #spring.jpa.ddl-auto 를 통해 설정 가능
     properties:
       hibernate:
         show_sql: true

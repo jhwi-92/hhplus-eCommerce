@@ -2,6 +2,8 @@ package hhplus.ecommoerce.biz.application.domain.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -14,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class OrderHistory {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "PK ID", example = "1")
     Long id;
 

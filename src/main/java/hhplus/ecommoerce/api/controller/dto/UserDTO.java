@@ -29,7 +29,6 @@ public record UserDTO(
 
     public User toEntity() {
         return new User(
-            this.id,
             this.name,
             this.point,
             LocalDateTime.now()
