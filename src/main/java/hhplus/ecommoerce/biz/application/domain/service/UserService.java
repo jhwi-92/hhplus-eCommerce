@@ -45,4 +45,16 @@ public class UserService {
 
     }
 
+    public void decreaseUserPointWithPessimisticLock(long userId, int price) {
+
+        User user = userRepository.findByIdWithPessimisticLock(userId).orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+
+        //validator을 만든 이유가 검증할 게 더 있을 것 같아서 만들었는데 사용할게 우선 없어서 삭제하기도 좀 그래서 일단 사용하고있습니다..
+        userValidator.validator(user, price);
+
+        user.decreasePoint(price);
+        userRepository.save(user);
+
+    }
+
 }

@@ -65,6 +65,28 @@ public class OrderFacade {
         return newOrder;
     }
 
+    @Transactional
+    public Order orderPaymentPessimistic(Order order) {
+        int totalPrice = order.getPrice() * order.getQuantity();
+
+        // 재고확인 후 차감 (비관적 락 사용)
+        productService.decreaseProductWithPessimisticLock(order.getProductId(), order.getQuantity());
+
+        // 유저확인 후 포인트 차감 (비관적 락 사용)
+        userService.decreaseUserPointWithPessimisticLock(order.getUserId(), totalPrice);
+
+        // 주문 생성
+        Order newOrder = orderService.createOrder(order.getUserId(), order.getProductId(), order.getQuantity(), order.getPrice());
+
+        // 결제 요청
+        paymentService.sendPayment();
+
+        // 외부 데이터 수집 플랫폼으로 데이터 전송
+        dataPlatformService.sendDataPlatform();
+
+        return newOrder;
+    }
+
     private Order executeOrderPayment(Order order) {
         int totalPrice = order.getPrice() * order.getQuantity();
 

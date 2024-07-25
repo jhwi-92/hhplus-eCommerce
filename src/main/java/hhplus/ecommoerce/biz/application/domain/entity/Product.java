@@ -36,8 +36,8 @@ public class Product {
     @Schema(description = "등록 일시", example = "2023-01-01T00:00:00")
     LocalDateTime createdAt;
 
-    @Version
-    private Integer version = 0;  // 버전 필드 추가
+//    @Version
+//    private Integer version = 0;  // 버전 필드 추가
 
     public Product(String name, Integer price, Integer quantity, LocalDateTime createdAt) {
         this.name = name;

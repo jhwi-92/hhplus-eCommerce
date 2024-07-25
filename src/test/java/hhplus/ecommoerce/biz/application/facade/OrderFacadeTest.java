@@ -150,4 +150,69 @@ class OrderFacadeTest {
 
     }
 
+
+    //626ms
+    @Test
+    public void 비관적락_테스트() throws InterruptedException {
+
+        //given
+        int numberOfThreads = 10;
+        CountDownLatch latch = new CountDownLatch(1);
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+        AtomicInteger successCount = new AtomicInteger(0);
+
+        Long userId = 1L;
+        Long productId = 1L;
+        int quantity = 1;
+        int price = 1000;
+        String status = "성공";
+
+        //when
+        long startTime = System.currentTimeMillis();
+        for (int i = 0; i < numberOfThreads; i++) {
+            executorService.submit(() -> {
+                try {
+                    latch.await(); // 모든 스레드가 준비될 때까지 대기
+                    Order order = new Order(userId, productId, quantity, price, status);
+                    Order newOrder = orderFacade.orderPaymentPessimistic(order);
+                    if (newOrder != null && "성공".equals(newOrder.getStatus())) {
+                        successCount.incrementAndGet();
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        latch.countDown(); // 모든 스레드 시작
+        executorService.shutdown();
+
+        while (!executorService.isTerminated()) {
+            Thread.sleep(100);
+        }
+        executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS); // 모든 스레드가 종료될 때까지 대기
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+
+        System.out.println("전체 스레드 실행 시간: " + duration + "ms");
+
+        //then
+        Product updatedProduct = productService.getProduct(productId);
+        User updatedUser = userService.selectUser(userId);
+
+        System.out.println("성공한 주문수: " + successCount.get());
+        System.out.println("남은 재고 수: " + updatedProduct.getQuantity());
+        // 성공한 주문 수 확인
+        assertEquals(successCount.get(), 100 - updatedProduct.getQuantity());
+
+        System.out.println("상품 재고: " + updatedProduct.getQuantity());
+        // 재고 확인
+        assertTrue(updatedProduct.getQuantity() == 90);
+
+        System.out.println("유저 잔액: " + updatedUser.getPoint());
+        // 사용자 잔액 확인
+        assertEquals(10000000 - (successCount.get() * price), updatedUser.getPoint());
+
+    }
+
 }
