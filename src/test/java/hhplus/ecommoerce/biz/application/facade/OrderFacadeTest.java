@@ -86,6 +86,7 @@ class OrderFacadeTest {
         assertEquals(999000, userService.selectUser(userId).getPoint());
     }
 
+    //1350ms
     @Test
     public void 낙관적락_테스트() throws InterruptedException {
 
