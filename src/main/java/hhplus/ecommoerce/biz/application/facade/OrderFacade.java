@@ -10,10 +10,13 @@ import hhplus.ecommoerce.biz.application.domain.service.ProductService;
 import hhplus.ecommoerce.biz.application.domain.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class OrderFacade {
 
     private final ProductService productService;
@@ -29,12 +32,18 @@ public class OrderFacade {
 
         int totalPrice = order.getPrice() * order.getQuantity();
 
-        //재고확인 후 차감
-        productService.decreaseProduct(order.getProductId(), order.getQuantity());
+        try {
+            //재고확인 후 차감
+            productService.decreaseProduct(order.getProductId(), order.getQuantity());
 
-        //유저확인 후 포인트 차감
-        userService.decreaseUserPoint(order.getUserId(), totalPrice);
+            //유저확인 후 포인트 차감
+            userService.decreaseUserPoint(order.getUserId(), totalPrice);
 
+
+        } catch (OptimisticLockingFailureException e) {
+            log.warn("Optimistic locking failed. Retrying transaction.");
+
+        }
         //주문 생성
         Order newOrder = orderService.createOrder(order.getUserId(), order.getProductId(), order.getQuantity(), order.getPrice());
 

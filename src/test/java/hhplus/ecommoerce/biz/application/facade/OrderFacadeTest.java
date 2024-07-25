@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,6 +33,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @DisplayName("주문결제 파사드를 테스트한다.")
+@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 class OrderFacadeTest {
@@ -53,10 +55,10 @@ class OrderFacadeTest {
     @BeforeEach
     void setUp() {
 
-        Product product = new Product(10L, "윤용", 3200, 100, LocalDateTime.now());
+        Product product = new Product("윤용", 3200, 100, LocalDateTime.now());
         productRepository.save(product);
 
-        User user = new User(11L, "김종협", 1000000, LocalDateTime.now());
+        User user = new User( "김종협", 1000000, LocalDateTime.now());
         userRepository.save(user);
 
     }
@@ -85,11 +87,12 @@ class OrderFacadeTest {
     }
 
     @Test
-    public void 락_안걸었을_때_테스트() throws InterruptedException {
+    public void 낙관적락_테스트() throws InterruptedException {
 
         List<Product> products = productService.selectProductsList();
         for (Product product: products) {
             System.out.println("테스트 Product ID: " + product.getId());
+            System.out.println("테스트 Product Name: " + product.getName());
         }
 
         //given
@@ -98,13 +101,14 @@ class OrderFacadeTest {
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         AtomicInteger successCount = new AtomicInteger(0);
 
-        Long userId = 11L;
-        Long productId = 10L;
+        Long userId = 1L;
+        Long productId = 1L;
         int quantity = 1;
         int price = 1000;
         String status = "성공";
 
         //when
+        long startTime = System.currentTimeMillis();
         for (int i = 0; i < numberOfThreads; i++) {
             executorService.submit(() -> {
                 try {
@@ -131,9 +135,15 @@ class OrderFacadeTest {
 
         latch.countDown(); // 모든 스레드 시작
         executorService.shutdown();
+
         while (!executorService.isTerminated()) {
             Thread.sleep(100);
         }
+        executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS); // 모든 스레드가 종료될 때까지 대기
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+
+        System.out.println("전체 스레드 실행 시간: " + duration + "ms");
 
         //then
         Product updatedProduct = productService.getProduct(productId);
@@ -153,7 +163,5 @@ class OrderFacadeTest {
         assertEquals(1000000 - (successCount.get() * price), updatedUser.getPoint());
 
     }
-
-
 
 }

@@ -2,8 +2,11 @@ package hhplus.ecommoerce.biz.application.domain.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.Getter;
@@ -17,6 +20,7 @@ import lombok.NoArgsConstructor;
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "PK ID", example = "1")
     Long id;
 
@@ -32,8 +36,10 @@ public class Product {
     @Schema(description = "등록 일시", example = "2023-01-01T00:00:00")
     LocalDateTime createdAt;
 
-    public Product(Long id, String name, Integer price, Integer quantity, LocalDateTime createdAt) {
-        this.id = id;
+    @Version
+    private Integer version = 0;  // 버전 필드 추가
+
+    public Product(String name, Integer price, Integer quantity, LocalDateTime createdAt) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
