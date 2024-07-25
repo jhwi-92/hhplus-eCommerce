@@ -89,12 +89,6 @@ class OrderFacadeTest {
     @Test
     public void 낙관적락_테스트() throws InterruptedException {
 
-        List<Product> products = productService.selectProductsList();
-        for (Product product: products) {
-            System.out.println("테스트 Product ID: " + product.getId());
-            System.out.println("테스트 Product Name: " + product.getName());
-        }
-
         //given
         int numberOfThreads = 10;
         CountDownLatch latch = new CountDownLatch(1);
@@ -114,18 +108,9 @@ class OrderFacadeTest {
                 try {
                     latch.await(); // 모든 스레드가 준비될 때까지 대기
                     Order order = new Order(userId, productId, quantity, price, status);
-                    try {
-                        Order newOrder = orderFacade.orderPayment(order);
-                        if (newOrder != null && "성공".equals(newOrder.getStatus())) {
-                            successCount.incrementAndGet();
-                        }
-                    } catch (Exception e) {
-                        System.out.println("에러: " + e.getMessage());
-                        List<Product> products2 = productService.selectProductsList();
-                        for (Product product: products2) {
-                            System.out.println("테스트22 Product ID: " + product.getId());
-                        }
-                        // 예외 처리 (재고 부족, 잔액 부족 등)
+                    Order newOrder = orderFacade.orderPayment(order);
+                    if (newOrder != null && "성공".equals(newOrder.getStatus())) {
+                        successCount.incrementAndGet();
                     }
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -160,7 +145,7 @@ class OrderFacadeTest {
 
         System.out.println("유저 잔액: " + updatedUser.getPoint());
         // 사용자 잔액 확인
-        assertEquals(1000000 - (successCount.get() * price), updatedUser.getPoint());
+        assertEquals(10000000 - (successCount.get() * price), updatedUser.getPoint());
 
     }
 

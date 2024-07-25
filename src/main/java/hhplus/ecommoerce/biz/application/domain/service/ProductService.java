@@ -4,10 +4,11 @@ package hhplus.ecommoerce.biz.application.domain.service;
 import hhplus.ecommoerce.biz.application.domain.service.validator.ProductValidator;
 import hhplus.ecommoerce.biz.application.domain.entity.Product;
 import hhplus.ecommoerce.biz.application.domain.repository.ProductRepository;
-import jakarta.transaction.Transactional;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -28,6 +29,7 @@ public class ProductService {
         return productTopList;
     }
 
+    @Transactional(readOnly = true)
     public Product getProduct(Long productId) {
 
         Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("상품정보를 찾을 수 없습니다."));
@@ -35,7 +37,7 @@ public class ProductService {
         return product;
     }
 
-    @Transactional
+
     public void decreaseProduct(long productId, int quantity) {
 
         Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("상품정보를 찾을 수 없습니다."));
