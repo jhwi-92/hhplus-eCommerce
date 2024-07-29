@@ -14,14 +14,11 @@ public class OrderService {
 
     public Order createOrder(Long userId, Long productId, Integer quantity, Integer price) {
         Order newOrder = new Order(
-            null,  // id는 자동 생성될 것이므로 null
             userId,
             productId,
             quantity,
             price,
-            "성공",  // 상태를 "성공"으로 설정
-            LocalDateTime.now(),
-            LocalDateTime.now()
+            "성공"
         );
 
         return orderRepository.save(newOrder);

@@ -1,3 +1,5 @@
+### [동시성 문제](https://fortune-piccolo-c51.notion.site/e19c5a0ac20e4bbf9a896582d3d6641e?pvs=4)
+
 ### [마일스톤](https://github.com/users/jhwi-92/projects/1?pane=issue&itemId=69389330)
 
 ### [API 명세서](https://jhwi-92.gitbook.io/hhplus-ecommerce/)

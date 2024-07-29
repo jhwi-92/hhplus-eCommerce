@@ -43,10 +43,10 @@ class UserServiceTest {
     @Test
     void 유저_포인트_충전_성공() {
         // given
-        Long userId = 1L;
+        Long userId = 2L;
         Integer initialPoints = 100;
         Integer chargePoint = 50;
-        User user = new User(userId, "이석범", initialPoints, LocalDateTime.now());
+        User user = new User("이석범", initialPoints, LocalDateTime.now());
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
