@@ -34,7 +34,7 @@ public class Product {
     Integer quantity;
 
     @Schema(description = "등록 일시", example = "2023-01-01T00:00:00")
-    LocalDateTime createdAt;
+    String createdAt;
 
 //    @Version
 //    private Integer version = 0;  // 버전 필드 추가
@@ -43,7 +43,7 @@ public class Product {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
-        this.createdAt = createdAt;
+        this.createdAt = createdAt.toString();
     }
 
     public void decreaseQuantity(int quantity) {
