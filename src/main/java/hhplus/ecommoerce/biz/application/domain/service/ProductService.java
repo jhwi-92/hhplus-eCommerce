@@ -7,6 +7,7 @@ import hhplus.ecommoerce.biz.application.domain.repository.ProductRepository;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class ProductService {
         return productList;
     }
 
+    @Cacheable(value = "topProducts", key="'top5'")
     public List<Product> selectProductsTopList() {
         List<Product> productTopList = productRepository.findProductTopList();
 

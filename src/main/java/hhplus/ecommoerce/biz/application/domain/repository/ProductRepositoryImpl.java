@@ -1,6 +1,9 @@
 package hhplus.ecommoerce.biz.application.domain.repository;
 
 
+import static hhplus.ecommoerce.biz.application.domain.entity.QOrderHistory.orderHistory;
+import static hhplus.ecommoerce.biz.application.domain.entity.QProduct.product;
+
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hhplus.ecommoerce.biz.application.domain.entity.Product;
@@ -19,23 +22,15 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     @Override
     public List<Product> findProductTopList() {
 
-        QProduct product = QProduct.product;
-        QOrderHistory orderHistory = QOrderHistory.orderHistory;
-
-        // 서브쿼리를 인라인으로 작성
-        JPAQuery<Long> subQuery = queryFactory
-            .select(orderHistory.productId)
-            .from(orderHistory)
-            .where(orderHistory.status.eq("완료")
-                .and(orderHistory.yyyyMmDd.goe("20240710")))
-            .groupBy(orderHistory.productId)
-            .orderBy(orderHistory.productId.count().desc())
-            .limit(5);
-
-        // 메인 쿼리
         return queryFactory
             .selectFrom(product)
-            .where(product.id.in(subQuery))
+            .join(orderHistory).on(product.id.eq(orderHistory.productId))
+            .where(orderHistory.status.eq("성공")
+                .and(orderHistory.yyyyMmDd.goe("20240701")))
+            .groupBy(product.id)
+            .orderBy(orderHistory.productId.count().desc())
+            .limit(5)
             .fetch();
     }
+
 }
