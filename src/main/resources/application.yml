@@ -1,19 +1,19 @@
 spring:
   application:
-    name: eCommoerce
+    name: eCommerce
   datasource:
-    driver-class-name: org.h2.Driver
-    url: 'jdbc:h2:mem:test' #IN-Memory Mode
-    #url: 'jdbc:h2:~/test'  #Embedded Mode
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/eCommerce?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: root
 
-  h2:
-    console: #H2 DB? ??? ??? ? ?? ??
-      enabled: true     #H2 Console ?? ??
-      path: /h2-console #H2 Console ????
+#  h2:
+#    console: #H2 DB? ??? ??? ? ?? ??
+#      enabled: true     #H2 Console ?? ??
+#      path: /h2-console #H2 Console ????
 
   jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
     hibernate:
       ddl-auto: update #spring.jpa.ddl-auto 를 통해 설정 가능
@@ -24,7 +24,7 @@ spring:
     defer-datasource-initialization: true
   sql:
     init:
-      mode: always
+      mode: never
   cache:
     type: redis
   data:
