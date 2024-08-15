@@ -1,18 +1,25 @@
 package hhplus.ecommoerce.biz.application.facade;
 
 import hhplus.ecommoerce.biz.application.domain.entity.Order;
+<<<<<<< Updated upstream
 import hhplus.ecommoerce.biz.application.domain.service.DataPlatformService;
+=======
+import hhplus.ecommoerce.biz.application.domain.event.OrderEvent;
+import hhplus.ecommoerce.biz.application.domain.event.OrderEventPublisher;
+>>>>>>> Stashed changes
 import hhplus.ecommoerce.biz.application.domain.service.OrderService;
 import hhplus.ecommoerce.biz.application.domain.service.PaymentService;
 import hhplus.ecommoerce.biz.application.domain.service.ProductService;
 import hhplus.ecommoerce.biz.application.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+<<<<<<< Updated upstream
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+=======
+>>>>>>> Stashed changes
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 
 @RequiredArgsConstructor
 @Component
@@ -23,8 +30,12 @@ public class OrderFacade {
     private final UserService userService;
     private final OrderService orderService;
     private final PaymentService paymentService;
+<<<<<<< Updated upstream
     private final DataPlatformService dataPlatformService;
     private final TransactionTemplate transactionTemplate;
+=======
+    private final OrderEventPublisher eventPublisher;
+>>>>>>> Stashed changes
 
     //주문결제
     //현재 분리하기 좀 애매해서 락에 대해서 공부하고 추후에 @EventListener사용하여 분리할 수정예정입니다
@@ -81,6 +92,7 @@ public class OrderFacade {
         // 결제 요청
         paymentService.sendPayment();
 
+<<<<<<< Updated upstream
         // 외부 데이터 수집 플랫폼으로 데이터 전송
         dataPlatformService.sendDataPlatform();
 
@@ -107,4 +119,13 @@ public class OrderFacade {
 
         return newOrder;
     }
+=======
+        // 이벤트 발행
+        // 1. 데이터플랫폼 전송
+        // 2. 카프카 메시지 발행
+        eventPublisher.publisher(new OrderEvent(newOrder));
+
+        return newOrder;
+    }
+>>>>>>> Stashed changes
 }

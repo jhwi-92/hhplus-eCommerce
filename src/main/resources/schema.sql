@@ -48,4 +48,21 @@ USER_ID BIGINT,
 PRODUCT_ID BIGINT,
 QUANTITY INTEGER,
 CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+<<<<<<< Updated upstream
 );
+=======
+);
+
+CREATE TABLE outbox (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    aggregate_type VARCHAR(255),
+    aggregate_id VARCHAR(255),
+    event_type VARCHAR(255),
+    payload JSON,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_order_history_date_product
+ON ORDER_HISTORY(YYYY_MM_DD, PRODUCT_ID);
+>>>>>>> Stashed changes
