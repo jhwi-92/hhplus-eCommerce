@@ -1,6 +1,6 @@
-package hhplus.ecommoerce.api.controller;
+package hhplus.ecommoerce.interfaces.api.controller;
 
-import hhplus.ecommoerce.api.controller.dto.CartDTO;
+import hhplus.ecommoerce.interfaces.api.controller.dto.CartDTO;
 import hhplus.ecommoerce.biz.application.domain.service.CartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
