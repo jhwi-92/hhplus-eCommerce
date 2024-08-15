@@ -1,4 +1,4 @@
-package hhplus.ecommoerce.api.controller.dto;
+package hhplus.ecommoerce.interfaces.api.controller.dto;
 
 import hhplus.ecommoerce.biz.application.domain.entity.Order;
 import io.swagger.v3.oas.annotations.media.Schema;

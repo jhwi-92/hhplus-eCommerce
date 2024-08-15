@@ -1,6 +1,6 @@
-package hhplus.ecommoerce.api.controller;
+package hhplus.ecommoerce.interfaces.api.controller;
 
-import hhplus.ecommoerce.api.controller.dto.OrderDTO;
+import hhplus.ecommoerce.interfaces.api.controller.dto.OrderDTO;
 import hhplus.ecommoerce.biz.application.domain.service.OrderHistoryService;
 import hhplus.ecommoerce.biz.application.facade.OrderFacade;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @Tag(name = "Order", description = "Order API")
 @RequiredArgsConstructor
 @RestController
@@ -33,6 +35,7 @@ public class OrderController {
         content = @Content(schema = @Schema(implementation = OrderDTO.class)))
     @PostMapping("/{userId}/payment")
     public ResponseEntity<OrderDTO> ordersPayment(@PathVariable Long userId, @RequestBody OrderDTO orderDTO) {
+        log.info("ordersPayment Controller");
         return ResponseEntity.ok(OrderDTO.from(orderFacade.orderPayment(orderDTO.toEntity())));
     }
 
