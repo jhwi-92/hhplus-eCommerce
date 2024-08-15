@@ -31,10 +31,26 @@ spring:
     redis:
       port: 6379
       host: localhost
+
+  kafka:
+    bootstrap-servers: localhost:9092
+#    consumer:
+#      group-id: 'order_group'
+#      auto-offset-reset: earliest
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#      properties:
+#        spring.json.trusted.packages: "*"
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#      properties:
+#        spring.json.add.type.headers: false
+
 logging:
   level:
-    root: DEBUG
-#      springframework: DEBUG
+    root: INFO
+#    springframework: DEBUG
 server:
   port: 80
 
